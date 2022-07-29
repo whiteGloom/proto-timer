@@ -4,24 +4,23 @@ import Clock from "./widgets/clock";
 import ButtonTitled from "./widgets/button-titled";
 import CheckboxButton from "./widgets/checkbox-button";
 import Sequence from "./widgets/sequence";
-
-const StyledApp = styled.div`
-  background: #f0f0f0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-`;
+import RootStore from './stores/root';
 
 const Main = styled.div`
+  background: #f0f0f0;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  overflow: hidden;
 `;
 
-const ContentWrap = styled.div`
-  margin-top: 160px;
+const ContentWrap = styled.div`  
+  & > *:not(:first-child) {
+    margin-top: 40px;
+  }
 `;
 
 const Menu = styled.div`
@@ -32,24 +31,17 @@ const Menu = styled.div`
   border-radius: 8px;
 
   & > *:not(:first-child) {
-    margin-left: 15px;
+    margin-left: 10px;
   }
 `;
 
-const ClockWrapper = styled.div`
-  padding: 10px;
-  border: 1px solid white;
-  border-radius: 58px;
-  margin-top: 40px;
-`;
+const RootStoreInstance = new RootStore();
 
-const StyledSequence = styled(Sequence)`
-  margin-top: 40px;
-`;
+export const RootStoreContext = React.createContext(RootStoreInstance);
 
 function App() {
   return (
-    <StyledApp>
+    <RootStoreContext.Provider value={RootStoreInstance}>
       <Main>
         <ContentWrap>
           <Menu>
@@ -57,13 +49,11 @@ function App() {
             <ButtonTitled title={'Pause'} onClick={() => {}}/>
             <CheckboxButton title={'Repeat'} onClick={() => {}} isChecked={true}/>
           </Menu>
-          <ClockWrapper>
-            <Clock />
-          </ClockWrapper>
-          <StyledSequence />
+          <Clock />
+          <Sequence />
         </ContentWrap>
       </Main>
-    </StyledApp>
+    </RootStoreContext.Provider>
   );
 }
 

@@ -6,6 +6,12 @@ export type ClockProps = {
 };
 
 const Wrapper = styled.div`
+  padding: 10px;
+  border: 1px solid white;
+  border-radius: 58px;
+`;
+
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +19,7 @@ const Wrapper = styled.div`
   background: #fff;
   border-radius: 50px;
   box-sizing: border-box;
-`;
+`
 
 const Timer = styled.p`
   font-size: 10rem;
@@ -23,9 +29,11 @@ const Timer = styled.p`
 const Clock: FC<ClockProps> = (props) => {
   return (
     <Wrapper className={`${props.className}`}>
-      <Timer>
-        23:21
-      </Timer>
+      <Content>
+        <Timer>
+          23:21
+        </Timer>
+      </Content>
     </Wrapper>
   );
 }

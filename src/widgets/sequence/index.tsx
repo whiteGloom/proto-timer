@@ -1,5 +1,9 @@
-import React, {FC} from 'react';
+import React, {FC, ReactElement, ChangeEvent} from 'react';
+import {observer} from 'mobx-react-lite';
 import styled from 'styled-components';
+import {RootStoreContext} from '../../App';
+import RootStore from '../../stores/root';
+import TaskModel from '../../models/task'
 
 export type SequenceProps = {
   className?: string;
@@ -51,28 +55,62 @@ const Input = styled.input`
 
 export type ItemProps = {
   isFake?: boolean;
+  taskData?: TaskModel,
 }
 
 const Item: FC<ItemProps> = (props) => {
+  const RootStore = React.useContext(RootStoreContext);
+  const valueRef = React.useRef('');
+
+  const onBlur = () => {
+    const numericValue = Number(valueRef.current);
+
+    if (valueRef.current.length === 0 || !Number.isFinite(numericValue)) {
+      return;
+    }
+
+    RootStore.tasksStore.addTask({duration: numericValue});
+  };
+
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    valueRef.current = event.target.value;
+  }
+
   return (
     <ItemWrapper isFake={props.isFake}>
       <div>
-        <Property>Duration:</Property>
-        <Input/>
+        <Property>{`Duration: ${props.isFake ? '' : props.taskData.duration}`}</Property>
+        <Input onChange={onChange} onBlur={onBlur}/>
       </div>
     </ItemWrapper>
   );
 };
 
+function getItems(store: RootStore): ReactElement[] {
+  const items: ReactElement[] = []
+  const tasks = store.tasksStore.tasks;
+  let i = 0;
+
+  for (i; i < tasks.length + 1; i++) {
+    if (i === tasks.length) {
+      items.push(<Item key={'fake'} isFake={true} />)
+      break;
+    }
+
+    items.push(<Item key={tasks[i].id} taskData={tasks[i]} />)
+  }
+
+  return items;
+}
+
 const Sequence: FC<SequenceProps> = (props) => {
+  const RootStore = React.useContext(RootStoreContext);
+
   return (
     <Wrapper className={`${props.className}`}>
-      <Item />
-      <Item />
-      <Item />
-      <Item isFake={true}/>
+      {getItems(RootStore)}
     </Wrapper>
   );
 };
 
-export default Sequence;
+export default observer(Sequence);

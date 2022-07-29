@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "types": ["@types/**"],
+    "lib": ["DOM", "ESNext"],
     "target": "ES5"
   }
 }
