@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Clock from "./widgets/clock";
 import ButtonTitled from "./widgets/button-titled";
 import CheckboxButton from "./widgets/checkbox-button";
-import Sequence from "./widgets/sequence";
+import Scheme from "./widgets/scheme";
 import RootStore from './stores/root';
 
 const Main = styled.div`
@@ -50,7 +50,7 @@ function App() {
             <CheckboxButton title={'Repeat'} onClick={() => {}} isChecked={true}/>
           </Menu>
           <Clock />
-          <Sequence />
+          <Scheme />
         </ContentWrap>
       </Main>
     </RootStoreContext.Provider>
